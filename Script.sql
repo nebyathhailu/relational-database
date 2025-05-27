@@ -61,6 +61,137 @@ values
 (11, 4, 5, '2022-10-11', 1, 800.00),
 (12, 5, 6, '2022-12-29', 4, 1000.00);
 
+--1
+select employee_id as EmployeeID, first_name as FirstName, last_name as LastName,
+gender as Gender, department as Department, hire_date as HireDate
+from company_data.employees;
+
+--2
+select em.first_name as FirstName
+from company_data.employees em;
+
+--3
+select distinct department
+from company_data.employees;
+
+--4
+select count(*) as TotalEmployees
+from company_data.employees;
+
+--5
+select sum(salary) as TotalSalary
+from company_data.employees;
+
+--6
+select avg(salary) as AverageSalary
+from company_data.employees;
+
+--7
+select max(salary) as HighestSalary
+from company_data.employees;
+
+--8
+select min(salary) as LowestSalary
+from company_data.employees;
+
+--9
+select count(*) as MaleEmployees
+from company_data.employees
+where gender ilike 'Male';
+
+--10
+select count(*) as FemaleEmployees
+from company_data.employees
+where gender ilike 'female';
+
+--11
+select count(*) as HiredIn2020
+from company_data.employees
+where hire_date >= '2020-01-10' and hire_date <= '2021-01-01';
+
+--12
+select avg(salary) as AverageSalary
+from company_data.employees
+where department = 'IT';
+
+--13
+select department, count(*) TotalEmployees
+from company_data.employees
+group by department;
+
+--14
+select department, sum(salary) TotalSalary
+from company_data.employees
+group by department;
+
+--15
+select department, max(salary) MaximumSalary
+from company_data.employees
+group by department;
+
+--16
+select department, min(salary) MinimumSalary
+from company_data.employees
+group by department;
+
+--17
+select gender, count(*) as TotalEmployees
+from company_data.employees
+group by gender;
+
+--18
+select gender, avg(salary) as AverageSalary
+from company_data.employees
+group by gender;
+
+--19
+select * 
+from company_data.employees
+order by salary desc limit 5;
+
+--20
+select count(distinct first_name) UniqueNames
+from company_data.employees;
+
+--21
+select employees.first_name, employees.employee_id, department, sales.sale_id, sales.quantity
+from company_data.employees
+left join company_data.sales on company_data.employees.employee_id = company_data.sales.employee_id;
+
+--22
+select *
+from company_data.employees
+order by hire_date limit 10;
+
+--23
+select employee_id, first_name as Name , department
+from company_data.employees
+where employee_id not in
+(select sales.employee_id
+from company_data.sales
+)
+
+--24
+select employees.employee_id, employees.first_name as Name, count(sales.sale_id) as TotalSale
+from company_data.employees
+join company_data.sales on company_data.employees.employee_id = company_data.sales.employee_id
+group by employees.employee_id;
+
+--25
+select employees.employee_id, employees.first_name
+from company_data.employees
+join(
+    SELECT employee_id, SUM(quantity) AS total_sales
+    FROM company_data.sales
+    GROUP BY employee_id
+    order by total_sales desc
+    limit 1
+) AS top_seller on company_data.employees.employee_id = top_seller.sales.employee_id;
+
+
+
+
+
 
 
 
