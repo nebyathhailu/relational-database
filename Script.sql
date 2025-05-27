@@ -178,20 +178,42 @@ join company_data.sales on company_data.employees.employee_id = company_data.sal
 group by employees.employee_id;
 
 --25
-select employees.employee_id, employees.first_name
-from company_data.employees
-join(
-    SELECT employee_id, SUM(quantity) AS total_sales
-    FROM company_data.sales
-    GROUP BY employee_id
-    order by total_sales desc
-    limit 1
-) AS top_seller on company_data.employees.employee_id = top_seller.sales.employee_id;
+select employees.employee_id, employees.first_name, sum(sales.quantity) as total_sales
+from company_data.sales
+join company_data.employees on company_data.sales.employee_id = company_data.employees.employee_id
+group by employees.employee_id, employees.first_name
+order by total_sales desc limit 1;
 
+--26
+select employees.department, avg(sales.quantity) as AverageQuantitySold
+from company_data.sales
+join company_data.employees on company_data.sales.employee_id = company_data.employees.employee_id
+group by employees.department;
 
+--27
+select employees.employee_id, employees.first_name, sum(sales.quantity) as TotalSales2021
+from company_data.sales
+join company_data.employees on company_data.sales.employee_id = company_data.employees.employee_id
+where sales.sale_date >= '2021-01-01' and sales.sale_date <= '2022-01-01'
+group by employees.employee_id, employees.first_name;
 
+--28
+select employees.employee_id, employees.first_name, sum(sales.quantity) as TotalSales
+from company_data.sales
+join company_data.employees on company_data.sales.employee_id = company_data.employees.employee_id
+group by employees.employee_id, employees.first_name
+order by TotalSales desc limit 3;
 
+--29
+select employees.department, sum(sales.quantity) as QuantitySold
+from company_data.sales
+join company_data.employees on company_data.sales.employee_id = company_data.employees.employee_id
+group by employees.department;
 
-
+--30
+select products.category, sum(sales.quantity * sales.price) as TotalRevenue
+from company_data.sales
+join company_data.products on company_data.sales.product_id = company_data.products.product_id
+group by products.category;
 
 
